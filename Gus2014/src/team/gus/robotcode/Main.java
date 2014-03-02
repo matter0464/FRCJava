@@ -1,6 +1,7 @@
 package team.gus.robotcode;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
@@ -12,6 +13,7 @@ public class Main extends SimpleRobot {
     Victor SL1, SL2, SR1, SR2, IntakeLeft, IntakeRight;
     Compressor comp;
     Shooter shooter;
+    DoubleSolenoid IntakeSolenoid;
     Joystick CoDriver, Left, Right;
 
     public void robotInit() {
@@ -19,28 +21,28 @@ public class Main extends SimpleRobot {
         drive = new RobotDrive(1, 2, 3, 4);
         //Compressor
         comp = new Compressor(8, 1);
+        //Solenoids
+        IntakeSolenoid = new DoubleSolenoid(3,4);
         //Intake victors
         IntakeLeft = new Victor(5);
         IntakeRight = new Victor(6);
         //Start Compressor
         comp.start();
         //Shooter Thread
-        shooter = new Shooter();
+        shooter = new Shooter(IntakeSolenoid); // Solenoid // *Top limit // *Bot limit // *- may add
+        //Joysticks
         Left = new Joystick(1);
         Right = new Joystick(2);
         CoDriver = new Joystick(3);
-        //  shooter.start();
-        ////////////////////////////////////
-        //TEST/////////////////////////////
-       // SL1 = new Victor(7);
-       // SL2 = new Victor(8);
-       // SR1 = new Victor(9);
-       // SR2 = new Victor(10);
 
     }
 
     public void autonomous() {
-
+        //
+        //
+        //ToDo, Find a way to find the HOT ZONE and aim/shoot
+        //
+        //
     }
 
     /**
@@ -51,9 +53,9 @@ public class Main extends SimpleRobot {
             drive.tankDrive(Left, Right);
 
             if (CoDriver.getRawButton(1)) {
-                System.out.print("Pressed");
-                shooter.Fire();
-        
+                System.out.print("Fired!");
+                shooter.start();
+
             }
 
         }
